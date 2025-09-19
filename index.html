@@ -12,142 +12,338 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 		<style>
-			/* Post thumbnails: fixed uniform height (400px) while preserving aspect and cropping consistently */
+			/* Post thumbnails: misma altura, sin cortar la imagen (se ajusta manteniendo proporción) */
+			section.posts .image {
+				height: 160px;                /* altura uniforme para todas las miniaturas */
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				/* no overflow hidden para evitar cortar; object-fit: contain mantiene la imagen completa */
+			}
 			section.posts .image img {
-				height: 400px;
-				width: 100%;
-				object-fit: cover;
+				max-height: 100%;
+				max-width: 100%;
+				width: auto;
+				height: auto;
+				object-fit: contain;          /* NO crop: preserve entire image */
 				display: block;
 				border-radius: 6px;
+				margin: 0;
 			}
-	
-			/* Keep hero image (pic01) with its own sizes — do not override hero */
-			.image.main.hero-image img,
-			.image.main img { /* existing hero rules take precedence if present */
-				/* no changes here — hero kept separate */
-			}
-	
-			/* Responsive adjustments */
+
+			/* Ajustes responsivos: reduce la altura en pantallas pequeñas */
 			@media (max-width: 900px) {
-				section.posts .image img { height: 280px; }
+				section.posts .image { height: 120px; }
 			}
 			@media (max-width: 480px) {
-				section.posts .image img { height: 180px; }
+				section.posts .image { height: 90px; }
 			}
-		</style>
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">	// ...existing code...
-	<head>
-    <title>Julián Rivera Gómez</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-        /* Post thumbnails: fixed uniform height (400px) while preserving aspect and cropping consistently */
+
+			/* Make post images 30% smaller without cropping: scale by limiting max-width and keep aspect ratio.
+			   This targets images inside posts only and does NOT affect the hero image (.image.main). */
+			section.posts .image {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			section.posts .image img {
+				max-width: 70%;      /* 70% = 30% smaller than full width */
+				width: auto;
+				height: auto;
+				object-fit: contain; /* do not crop, preserve whole image */
+				display: block;
+				border-radius: 6px;
+				margin: 0;
+			}
+
+			/* On small screens keep images readable */
+			@media (max-width: 900px) {
+				section.posts .image img { max-width: 85%; }
+			}
+			@media (max-width: 480px) {
+				section.posts .image img { max-width: 100%; }
+			}
+
+			/* Ensure hero/main image remains unchanged */
+			.image.main img,
+			.image.main.hero-image img {
+				width: 100%;
+				max-width: 100%;
+				height: auto;
+				object-fit: cover;
+			}
+
+        /* Left-align only the bullet points inside posts.
+           Excludes .icons and header/title lists so titles/subtitles stay unchanged. */
+        section.posts article ul:not(.icons),
+        section.posts article ul:not(.icons) li {
+            text-align: left;
+        }
+
+        /* Ensure list markers render normally */
+        section.posts article ul:not(.icons) {
+            list-style-position: outside;
+        }
+
+        /* Professional improvements for posts section */
+        section.posts article {
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        section.posts article:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Refined date display */
+        section.posts header .date {
+            display: inline-block;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 1rem;
+        }
+
+        /* Consistent image sizing */
+        section.posts .image {
+            margin: 1.2rem auto;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         section.posts .image img {
-            height: 400px;
-            width: 100%;
-            object-fit: cover;
-            display: block;
+            max-height: 100%;
+            max-width: 85%;
+            object-fit: contain;
             border-radius: 6px;
         }
 
-        /* Keep hero image (pic01) with its own sizes — do not override hero */
-        .image.main.hero-image img,
-        .image.main img { /* existing hero rules take precedence if present */
-            /* no changes here — hero kept separate */
+        /* Professional bullet points */
+        section.posts article ul:not(.icons) {
+            margin: 1.2rem 0;
+            padding-left: 1.2rem;
+        }
+
+        section.posts article ul:not(.icons) li {
+            text-align: left;
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Refined icons row */
+        section.posts .icons {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        section.posts .icons a {
+            opacity: 0.85;
+            transition: opacity 0.15s ease;
+        }
+
+        section.posts .icons a:hover {
+            opacity: 1;
         }
 
         /* Responsive adjustments */
-        @media (max-width: 900px) {
-            section.posts .image img { height: 280px; }
+        @media (max-width: 736px) {
+            section.posts article {
+                padding: 1.4rem;
+            }
+            section.posts .image {
+                height: 120px;
+            }
         }
-        @media (max-width: 480px) {
-            section.posts .image img { height: 180px; }
-        }
-    </style>
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-</head>
-	// ...existing code...	// ...existing code...
-	<head>
-		<title>Julián Rivera Gómez</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-		<style>
-			/* Post thumbnails: fixed uniform height (400px) while preserving aspect and cropping consistently */
-			section.posts .image img {
-				height: 400px;
-				width: 100%;
-				object-fit: cover;
-				display: block;
-				border-radius: 6px;
-			}
-	
-			/* Keep hero image (pic01) with its own sizes — do not override hero */
-			.image.main.hero-image img,
-			.image.main img { /* existing hero rules take precedence if present */
-				/* no changes here — hero kept separate */
-			}
-	
-			/* Responsive adjustments */
-			@media (max-width: 900px) {
-				section.posts .image img { height: 280px; }
-			}
-			@media (max-width: 480px) {
-				section.posts .image img { height: 180px; }
-			}
-		</style>
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	// ...existing code...	// ...existing code...
-	<head>
-		<title>Julián Rivera Gómez</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-		<style>
-			/* Post thumbnails: fixed uniform height (400px) while preserving aspect and cropping consistently */
-			section.posts .image img {
-				height: 400px;
-				width: 100%;
-				object-fit: cover;
-				display: block;
-				border-radius: 6px;
-			}
-	
-			/* Keep hero image (pic01) with its own sizes — do not override hero */
-			.image.main.hero-image img,
-			.image.main img { /* existing hero rules take precedence if present */
-				/* no changes here — hero kept separate */
-			}
-	
-			/* Responsive adjustments */
-			@media (max-width: 900px) {
-				section.posts .image img { height: 280px; }
-			}
-			@media (max-width: 480px) {
-				section.posts .image img { height: 180px; }
-			}
-		</style>
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	// ...existing code...
 
-		<!-- Wrapper -->
+        /* Achievement highlights for KPIs */
+        .achievement-highlight {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 0.3em 0.8em;
+            border-radius: 4px;
+            margin: 0.2em 0;
+            font-weight: 500;
+        }
+
+        .metric {
+            color: #64ffda;
+            margin-right: 0.4em;
+        }
+
+        /* Enhanced visual hierarchy */
+        section.posts header h2 {
+            font-size: 1.6em;
+            margin-bottom: 0.8em;
+            position: relative;
+        }
+
+        section.posts header h2:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 0.5em;
+        }
+
+        /* Skills/Tools badges */
+        .skill-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5em;
+            margin: 1em 0;
+        }
+
+        .skill-badge {
+            display: inline-block;
+            padding: 0.3em 0.8em;
+            border-radius: 3px;
+            font-size: 0.85em;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Enhanced article hover state */
+        section.posts article {
+            position: relative;
+            overflow: hidden;
+        }
+
+        section.posts article:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #64ffda, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        section.posts article:hover:before {
+            transform: translateX(0);
+        }
+
+        /* Marketing Technology Stack */
+        .tech-stack {
+            margin: 4rem 0;
+            padding: 2rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tech-stack .major {
+            margin-bottom: 2rem;
+        }
+
+        .tech-stack .major h2 {
+            transition: color 0.3s ease;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack .major h2:hover {
+            color: #18bfef !important;  /* matches the blue accent color */
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            transition: transform 0.2s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(24, 191, 239, 0.1);
+        }
+
+        .tool-card span {
+            font-size: 0.75rem;        /* reduced from 0.9rem to 0.75rem */
+            margin-top: 0.5rem;        /* reduced margin for tighter spacing */
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 300;          /* lighter weight for smaller text */
+            transition: color 0.2s ease;
+            letter-spacing: 0.02em;    /* slight letter spacing for readability */
+        }
+
+        .tool-card:hover span {
+            color: #18bfef !important;              /* text changes to accent color on hover */
+        }
+
+        .tool-card img {
+            max-width: 80%;
+            height: auto;
+            margin-bottom: 0.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        .tool-card:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Copyright */
+        #copyright {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #copyright ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            color: black;
+        }
+
+        #copyright li {
+            margin-bottom: 0.5rem;
+        }
+
+        #copyright a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+
+        #copyright a:hover {
+            text-decoration: underline;
+        }
+		</style>
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">	<!-- Wrapper -->
 			<div id="wrapper" class="fade-in">
 
 				<!-- Intro -->
 					<div id="intro">
 						<h1>PORTFOLIO<br />
 						Julián Rivera</h1>
-						<p>My goal is to make and
-							save money for your company, which has been
-							proven with my track record of success.</p>
+						<p>Strategic Marketing Leader driving business growth through<br />
+    data-driven decisions and innovative digital solutions.</p>
 						<ul class="actions">
 							<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
 						</ul>
@@ -167,7 +363,21 @@
 							<!-- <li><a href="elements.html">Elements Reference</a></li> -->
 						</ul>
 						<ul class="icons">
-							<li><a href="https://www.linkedin.com/in/julian-rivera-g/" class="icon brands fa-linkedin" target="_blank"><span class="label">linkedin</span></a></li>
+							<li>
+        <a href="https://www.linkedin.com/in/julian-rivera-g/" class="icon brands fa-linkedin" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+            <span class="label">linkedin</span>
+        </a>
+    </li>
+    <li>
+        <a href="https://wa.me/573197102955" class="icon brands fa-whatsapp" target="_blank" rel="noopener noreferrer" title="WhatsApp">
+            <span class="label">whatsapp</span>
+        </a>
+    </li>
+    <li>
+        <a href="mailto:julian.ia.rivera@gmail.com" class="icon fa-envelope" target="_blank" rel="noopener noreferrer" title="Email">
+            <span class="label">email</span>
+        </a>
+    </li>
 						</ul>
 					</nav>
 
@@ -181,7 +391,7 @@
 									<h2><a href="#">Professional<br />
 									Profile</a></h2>
 									<p>An excellent leader trained to work as a team
-										player with 6+ years of Digital Marketing
+										player with 8+ years of Digital Marketing
 										experience. Outstanding in analytical and
 										critical thinking. A person of high integrity and
 										adaptable to change.</p>
@@ -210,26 +420,6 @@
 										<li><a href="https://companywebsite.com/" class="fa fa-bullseye" target="_blank"><span class="label"></span></a></li>
 										<li><a href="https://www.linkedin.com/company/digital-finance-international/" class="icon brands fa-linkedin" target="_blank"><span class="label">linkedin</span></a></li>
 									</ul>
-									<ul class="icons">
-    <li>
-        <a href="https://www.vivus.com.mx/" class="fa fa-globe" target="_blank"><span class="label">Vivus Mexico</span></a>
-    </li>
-    <li>
-        <a href="https://www.instagram.com/vivusmx/" class="icon brands fa-instagram" target="_blank"><span class="label">Vivus Mexico Instagram</span></a>
-    </li>
-    <li>
-        <a href="https://doctorpeso.co/" class="fa fa-globe" target="_blank"><span class="label">Doctor Peso</span></a>
-    </li>
-    <li>
-        <a href="https://www.instagram.com/doctorpeso_co/?hl=en" class="icon brands fa-instagram" target="_blank"><span class="label">Doctor Peso Instagram</span></a>
-    </li>
-    <li>
-        <a href="https://doctorsol.pe/" class="fa fa-globe" target="_blank"><span class="label">Doctor Sol</span></a>
-    </li>
-    <li>
-        <a href="https://www.instagram.com/doctorsol.pe" class="icon brands fa-instagram" target="_blank"><span class="label">Doctor Sol Instagram</span></a>
-    </li>
-</ul>
 								</article>
 
 								<article>
@@ -262,10 +452,10 @@
 										<li>Strengthened partnerships with external companies and improved team performance by focusing on strategy-specific skills, which led to better overall results.</li>
 									</ul>
 									<ul class="icons">
-										<li><a href="https://gtech.systems/" class="fa fa-bullseye"><span class="label" target="_blank"></span></a></li>
-										<li><a href="https://web.facebook.com/GTech.Systems" class="icon brands fa-facebook" target="_blank"><span class="label">facebook</span></a></li>
-										<li><a href="https://www.instagram.com/gtech__systems/" class="icon brands fa-instagram" target="_blank"><span class="label">instagram</span></a></li>
-										<li><a href="https://www.tiktok.com/@gtech_systems?lang=en" class="icon brands fa-tiktok" target="_blank"><span class="label">tiktok</span></a></li>
+										<li><a href="https://gtech.systems/" class="fa fa-bullseye" target="_blank" rel="noopener noreferrer"><span class="label"></span></a></li>
+										<li><a href="https://web.facebook.com/GTech.Systems" class="icon brands fa-facebook" target="_blank" rel="noopener noreferrer"><span class="label">facebook</span></a></li>
+										<li><a href="https://www.instagram.com/gtech__systems/" class="icon brands fa-instagram" target="_blank" rel="noopener noreferrer"><span class="label">instagram</span></a></li>
+										<li><a href="https://www.tiktok.com/@gtech_systems?lang=en" class="icon brands fa-tiktok" target="_blank" rel="noopener noreferrer"><span class="label">tiktok</span></a></li>
 									</ul>
 								</article>
 								<article>
@@ -280,10 +470,8 @@
 										<li>Delivered ~$30K USD in the first month for a Miami meal prep company through zero-ad spend and automation strategies. Doubled revenue in 3 months, reaching ~$60K USD, by automating the sales process and launching an influencer strategy.</li>
 									</ul>
 									<ul class="icons">
-										<li><a href="https://icunox.com/" class="fa fa-bullseye"><span class="label" target="_blank"></span></a></li>
 										<li><a href="https://www.instagram.com/megadoctores/" class="icon brands fa-instagram" target="_blank"><span class="label">instagram megadoctores</span></a></li>
-										<li><a href="https://megadoctores.com/" class="fa fa-bug"><span class="label" target="_blank"></span></a></li>
-										<li><a href="https://www.instagram.com/nutri.vive.meals/" class="icon brands fa-instagram" target="_blank"><span class="label">instagram vivemeals</span></a></li>
+										<li><a href="https://www.instagram.com/vivemeals" class="icon brands fa-instagram" target="_blank"><span class="label">instagram vivemeals</span></a></li>
 									</ul>
 								</article>
 								<article>
@@ -317,24 +505,56 @@
 									</ul>
 									<ul class="icons">
 										<li><a href="https://riveraclothing.co/" class="fa fa-bullseye" target="_blank"><span class="label"></span></a></li>
-										<li><a href="https://www.instagram.com/rivermax_/" class="icon brands fa-facebook" target="_blank"><span class="label">instagram</span></a></li>
-										<li><a href="https://www.instagram.com/riveraclothing.co/" class="icon brands fa-instagram" target="_blank"><span class="label">instagram</span></a></li>
+										<li><a href="https://www.facebook.com/rxrivermax " class="icon brands fa-facebook" target="_blank"><span class="label">instagram</span></a></li>
+										<li><a href="https://www.instagram.com/rivermax_/" class="icon brands fa-instagram" target="_blank"><span class="label">instagram</span></a></li>
 									</ul>
 								</article>
 							</section>
 
-				<!-- Brand logos (place images/vivusmx.png, doctorpeso.png, doctorsol.png) -->
-    <div class="dfi-logos">
-        <a href="https://www.vivus.com.mx/" target="_blank" title="Vivus Mexico">
-            <img src="images/vivusmx.png" alt="Vivus Mexico">
-        </a>
-        <a href="https://doctorpeso.co/" target="_blank" title="Doctor Peso">
-            <img src="images/doctorpeso.png" alt="Doctor Peso">
-        </a>
-        <a href="https://doctorsol.pe/" target="_blank" title="Doctor Sol">
-            <img src="images/doctorsol.png" alt="Doctor Sol">
-        </a>
+						<!-- Marketing Technology Stack -->
+						<section class="tech-stack">
+    <header class="major">
+        <h2>Marketing Technology Stack</h2>
+    </header>
+    <div class="tech-grid">
+        <div class="tool-card">
+            <img src="images/semrush-logo.png" alt="SEMrush">
+            <span>SEMrush</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/ga4-logo.png" alt="Google Analytics 4">
+            <span>GA4</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/search-console-logo.png" alt="Search Console">
+            <span>Search Console</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/screaming-frog-logo.png" alt="Screaming Frog">
+            <span>Screaming Frog</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/google-ads-logo.png" alt="Google Ads">
+            <span>Google Ads</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/salesforce-logo.png" alt="Salesforce">
+            <span>Salesforce</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/hubspot-logo.png" alt="HubSpot">
+            <span>HubSpot</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/wordpress-logo.png" alt="WordPress">
+            <span>WordPress</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/open-ai-logo.png" alt="OpenAI">
+            <span>OpenAI</span>
+        </div>
     </div>
+</section>
 
 				<!-- Copyright -->
 					<div id="copyright" >
