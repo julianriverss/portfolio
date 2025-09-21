@@ -349,10 +349,55 @@
         #copyright a:hover {
             text-decoration: underline;
         }
+
+            /* Mobile Navigation Buttons - visible only on small screens */
+            .mobile-nav-buttons {
+                display: none; /* Hidden by default on desktop */
+                width: 100%;
+                background: rgba(29, 36, 42, 0.95);
+                z-index: 900;
+                text-align: center;
+                padding: 10px 5px;
+                border-radius: 8px;
+                margin: 1em 0;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            }
+            
+            .mobile-nav-buttons a {
+                display: inline-block;
+                padding: 8px 10px;
+                margin: 0 5px;
+                border-radius: 4px;
+                background: rgba(255,255,255,0.05);
+                color: #fff;
+                text-decoration: none;
+                font-size: 0.9rem;
+                font-weight: bold;
+                letter-spacing: 0.05em;
+                border: 1px solid rgba(255,255,255,0.1);
+                transition: all 0.3s ease;
+                font-family: var(--heading-font); /* Match heading font */
+                text-transform: uppercase; /* Match other navigation styling */
+            }
+            
+            /* Show mobile navigation at appropriate breakpoint */
+            @media screen and (max-width: 736px) {
+                .mobile-nav-buttons {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                
+                /* Hide the regular menu button in mobile view */
+                #header nav {
+                    display: none;
+                }
+            }
 		</style>
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
-	<body class="is-preload">	<!-- Wrapper -->
+	<body class="is-preload">
+		<!-- Wrapper -->
 			<div id="wrapper" class="fade-in">
 
 				<!-- Intro -->
@@ -361,6 +406,14 @@
 						Julián Rivera</h1>
 						<p>Strategic Marketing Leader driving business growth through<br />
     data-driven decisions and innovative digital solutions.</p>
+    
+						<!-- Mobile Navigation Buttons - only visible on mobile, now positioned under intro text -->
+						<div class="mobile-nav-buttons">
+							<a href="index.html" class="active">Work</a>
+							<a href="Proyectos/index.html">Projects</a>
+							<a href="https://www.credential.net/profile/julianriveragmez765995/wallet" target="_blank">Certifications</a>
+						</div>
+						
 						<ul class="actions">
 							<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
 						</ul>

@@ -126,6 +126,61 @@
 				left: -12px;
 			}
 			
+			/* Responsive timeline for mobile devices */
+			@media screen and (max-width: 768px) {
+				.timeline:before {
+					left: 30px; /* Move timeline to the left side */
+					transform: none;
+				}
+				
+				.timeline-item {
+					width: 100%;  /* Full width for all items */
+					padding-left: 60px; /* Space for timeline and marker */
+					left: 0;      /* All items start from left edge */
+					margin-bottom: 2em;
+				}
+				
+				.timeline-item:nth-child(even) {
+					left: 0;  /* Override the desktop alternating layout */
+				}
+				
+				.timeline-marker {
+					left: 18px !important; /* Position all markers on left side */
+					right: auto !important;
+				}
+				
+				.timeline-content {
+					padding: 1.5em; /* Slightly reduce padding for mobile */
+				}
+				
+				/* Remove hover effect on mobile to prevent accidental triggering */
+				.timeline-content:hover {
+					transform: none;
+					box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+				}
+			}
+			
+			/* Further adjustments for very small screens */
+			@media screen and (max-width: 480px) {
+				.timeline-item {
+					padding-left: 50px;
+				}
+				
+				.timeline:before {
+					left: 24px;
+				}
+				
+				.timeline-marker {
+					width: 20px;
+					height: 20px;
+					left: 14px !important;
+				}
+				
+				.timeline-content {
+					padding: 1.2em;
+				}
+			}
+			
 			/* Client testimonial */
 			.testimonial {
 				background: linear-gradient(135deg, rgba(29, 36, 42, 0.95) 0%, rgba(42, 53, 64, 0.9) 100%);
