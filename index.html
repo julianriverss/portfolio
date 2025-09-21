@@ -261,8 +261,12 @@
 
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            grid-template-columns: repeat(5, 1fr); /* 5 columns for 2 rows of 5 images */
+            grid-template-rows: repeat(2, auto);    /* 2 rows */
             gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
         }
 
         .tool-card {
@@ -305,7 +309,20 @@
             transform: scale(1.1);
         }
 
-        /* Copyright */
+        /* Responsive behavior for smaller screens */
+        @media (max-width: 768px) {
+            .tech-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns on tablets */
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+                gap: 0.8rem;
+            }
+        }
         #copyright {
             padding: 2rem 0;
             text-align: center;
@@ -552,6 +569,10 @@
         <div class="tool-card">
             <img src="images/open-ai-logo.png" alt="OpenAI">
             <span>OpenAI</span>
+        </div>
+        <div class="tool-card">
+            <img src="images/meta.png" alt="Meta">
+            <span>Meta</span>
         </div>
     </div>
 </section>
