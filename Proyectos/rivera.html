@@ -11,12 +11,352 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<!-- Add Google Fonts for better typography -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+		<style>
+			/* Enhanced typography */
+			body {
+				--heading-font: 'Montserrat', sans-serif;
+				--body-font: 'Open Sans', sans-serif;
+			}
+			h1, h2, h3, h4, .project-title p, .stat-number, .skill-name, .back-button {
+				font-family: var(--heading-font);
+			}
+			p, ul, .skill-desc, .stat-label {
+				font-family: var(--body-font);
+			}
+			
+			/* Updated Professional color palette variables - only changing colors */
+			:root {
+				--primary: #2c5282;      /* Deeper blue - more readable */
+				--primary-light: #4299e1; /* Brighter blue for highlights */
+				--primary-dark: #1a365d;  /* Dark blue for depth */
+				--secondary: #e2e8f0;     /* Light gray-blue for subtle accents */
+				--dark-bg: #1a202c;       /* Darker background */
+				--dark-bg-lighter: #2d3748; /* Slightly lighter dark background */
+				--text: #f7fafc;          /* Crisp white text for better contrast */
+				--muted-text: #cbd5e0;    /* Lighter muted text for better readability */
+			}
+			
+			/* Subtle background pattern */
+			#main:before {
+				content: '';
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234299e1' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+				opacity: 0.2;
+				z-index: -1;
+				pointer-events: none;
+			}
+			
+			/* Enhanced project title */
+			.project-title {
+				text-align: center;
+				padding: 4em 0 2em 0;
+				position: relative;
+				background: linear-gradient(135deg, rgba(29, 36, 42, 0.95) 0%, rgba(42, 53, 64, 0.9) 100%);
+				margin-bottom: 3em;
+				border-radius: 0 0 50% 50% / 15%;
+			}
+			.project-title h1 {
+				margin-bottom: 0.2em;
+				font-size: 3em;
+				letter-spacing: 1px;
+			}
+			
+			/* Project timeline */
+			.timeline {
+				position: relative;
+				max-width: 1200px;
+				margin: 4em auto;
+				padding: 0 1em;
+			}
+			.timeline:before {
+				content: '';
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				width: 2px;
+				background: rgba(155, 241, 255, 0.3);
+				left: 50%;
+				transform: translateX(-50%);
+			}
+			.timeline-item {
+				margin-bottom: 3em;
+				position: relative;
+				width: 45%;
+			}
+			.timeline-item:nth-child(odd) {
+				left: 0;
+			}
+			.timeline-item:nth-child(even) {
+				left: 55%;
+			}
+			.timeline-content {
+				background: rgba(29, 36, 42, 0.9);
+				border-radius: 10px;
+				padding: 2em;
+				position: relative;
+				box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+				transition: all 0.3s ease;
+			}
+			.timeline-content:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+			}
+			.timeline-marker {
+				position: absolute;
+				top: 20px;
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				background: var(--primary-light);
+				box-shadow: 0 0 0 6px rgba(66, 153, 225, 0.2);
+				z-index: 1;
+			}
+			.timeline-item:nth-child(odd) .timeline-marker {
+				right: -12px;
+			}
+			.timeline-item:nth-child(even) .timeline-marker {
+				left: -12px;
+			}
+			
+			/* Back to top button */
+			.back-to-top {
+				position: fixed;
+				bottom: 2em;
+				right: 2em;
+				width: 50px;
+				height: 50px;
+				background: rgba(66, 153, 225, 0.8);
+				color: #2e3141;
+				border-radius: 50%;
+				text-align: center;
+				line-height: 50px;
+				font-size: 1.5em;
+				z-index: 999;
+				opacity: 0;
+				visibility: hidden;
+				transition: all 0.3s ease;
+				cursor: pointer;
+				box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+			}
+			.back-to-top.visible {
+				opacity: 1;
+				visibility: visible;
+			}
+			.back-to-top:hover {
+				background: var(--primary);
+				transform: translateY(-3px);
+				box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+			}
+			
+			/* Reduced image container size */
+			.image-container {
+				margin: 2em 0;
+				border-radius: 5px;
+				overflow: hidden;
+				box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+				height: auto; /* Changed from fixed height to auto */
+				max-height: 350px; /* Added max-height instead of fixed height */
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: #f7f9fc;
+				border: 1px solid rgba(66, 153, 225, 0.2);
+				max-width: 800px;
+				margin-left: auto;
+				margin-right: auto;
+				padding: 1em; /* Added padding to prevent images touching the borders */
+			}
+			
+			.image-container img {
+				display: block;
+				max-width: 100%;
+				max-height: 330px; /* Slightly less than container max-height */
+				width: auto; /* Allow natural width based on height constraint */
+				height: auto; /* Allow natural height based on width constraint */
+				object-fit: scale-down; /* Changed from contain to scale-down for better fit */
+				transition: transform 0.3s ease;
+			}
+			
+			/* Clean up any existing CSS that needs updates */
+			.project-title {
+				text-align: center;
+				padding: 3em 0 1em 0;
+				position: relative;
+			}
+			.project-title:after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 50%;
+				width: 100px;
+				height: 3px;
+				background: var(--primary-light);
+				transform: translateX(-50%);
+			}
+			.project-title h1 {
+				margin-bottom: 0.2em;
+				font-size: 2.5em;
+			}
+			.project-title p {
+				color: var(--primary-light);
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				font-size: 1em;
+			}
+			.project-container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 2em 0;
+			}
+			
+			.project-description {
+				font-size: 1.1em;
+				line-height: 1.8;
+				margin: 2em 0;
+				padding: 0 1em;
+			}
+			.section-title {
+				position: relative;
+				padding-bottom: 0.5em;
+				margin-bottom: 1em;
+				color: #ffffff;
+			}
+			.section-title:after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 60px;
+				height: 2px;
+				background: var(--primary-light);
+			}
+			.project-footer {
+				text-align: center;
+				margin-top: 4em;
+			}
+			.back-button {
+				display: inline-block;
+				padding: 0.8em 2em;
+				background: var(--primary);
+				color: var(--text) !important;
+				font-weight: bold;
+				text-decoration: none;
+				border-radius: 4px;
+				transition: all 0.3s ease;
+				border: none;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+			.back-button:hover {
+				background: var(--primary-light);
+				color: white !important;
+			}
+			/* Updated Skills section styles */
+			.skills-section {
+				margin: 3em 0;
+				background: rgba(29, 36, 42, 0.9);
+				border-radius: 10px;
+				padding: 2em;
+				color: white;
+			}
+			.skills-row {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				margin-top: 1.5em;
+				gap: 1em;
+			}
+			.skill-item {
+				display: inline-flex;
+				align-items: center;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 5px;
+				padding: 0.7em 1.2em;
+				transition: all 0.3s ease;
+				margin-bottom: 0.5em;
+			}
+			.skill-item:hover {
+				background: rgba(66, 153, 225, 0.2);
+				transform: translateY(-3px);
+			}
+			.skill-icon {
+				font-size: 1.2em;
+				margin-right: 0.5em;
+				color: var(--primary-light);
+			}
+			.skill-name {
+				font-weight: bold;
+				font-size: 0.9em;
+				white-space: nowrap;
+			}
+			@media screen and (max-width: 736px) {
+				.stats-container {
+					flex-direction: column;
+				}
+				.stat-box {
+					border-right: none;
+					border-bottom: 1px solid rgba(255,255,255,0.1);
+					padding: 1em;
+				}
+				.stat-box:last-child {
+					border-bottom: none;
+				}
+			}
+			
+			/* Only change the main background color to a gradient */
+			body {
+				background: linear-gradient(135deg, #f0f9ff 0%, #c2e9fb 50%, #dbe6f6 100%);
+			}
+			
+			/* Keep the dark styled cards with better contrast against the lighter background */
+			.timeline-content, .skills-section, div[style*="background: rgba(29, 36, 42, 0.8)"] {
+				box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+			}
+			
+			/* Fix heading text readability on sections */
+			h2.section-title {
+				color: var(--dark-bg); /* Change section titles to dark color instead of white */
+			}
+			
+			/* Make the timeline line more visible against light background */
+			.timeline:before {
+				background: rgba(44, 82, 130, 0.4); /* Use primary color with higher opacity */
+				width: 3px; /* Make it slightly thicker */
+			}
+			
+			/* Fix footer text visibility */
+			#footer {
+				background: rgba(29, 36, 42, 0.9); /* Add dark background to footer */
+				margin-top: 2em;
+			}
+			
+			/* Make sure the text in dark containers stays white */
+			.timeline-content h3 {
+				color: white !important; 
+			}
+			
+			/* Fix section titles inside dark containers */
+			.skills-section .section-title {
+				color: white !important; /* Keep white text for section titles in dark boxes */
+			}
+			
+			/* Fix the specific h3 section title for display */
+			div[style*="margin: 4em 0;"] h3.section-title {
+				color: var(--dark-bg) !important; /* Use dark color to match other section titles */
+			}
+		</style>
 	</head>
 	<body class="is-preload">
-
 		<!-- Wrapper -->
 			<div id="wrapper">
-
 				<!-- Header -->
 					<header id="header">
 						<a href="index.html" class="logo"><strong>Julián Rivera</strong> <span>Digital Marketer</span></a>
@@ -37,70 +377,141 @@
 
 				<!-- Main -->
 					<div id="main" class="alt">
-
-						<!-- One -->
-							<section id="one">
-								<div class="inner">
-									<header class="major">
-										<h1>Rivera Clothing</h1>
-									</header>
-									<span class="image main"><img src="images/ima6.PNG" alt="" /></span>
-									<p>This website was born from River Max, as a new brand for a different 
-										public they wanted to create an exclusive brand with a minimal concept, 
-										so I built the website optimizing it for technical SEO and a minimal 
-										design.</p>
-									<span class="image main"><img src="images/ima21.PNG" alt="" /></span>
-
-									<ul class="actions stacked">
-										<li><a href="index.html" class="button primary fit">Projects</a></li>
-
-									</ul>
-								</div>
-							</section>
-
-
-					</div>
-
-				<!-- Contact -->
-					<section id="contact">
-						<div class="inner">
-							<section class="split">
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-envelope"></span>
-										<h3>Email</h3>
-										<a href="#">julianpoli.20@gmail.com</a>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-phone"></span>
-										<h3>Phone</h3>
-										<span>(+57) 319-710-29-55</span>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-home"></span>
-										<h3>Address</h3>
-										<span>Itaguí, Antioquía<br />
-										Calle 84# 58-50 <br />
-										Colombia</span>
-									</div>
-								</section>
-							</section>
+						<!-- Project Header -->
+						<div class="project-title">
+							<h1>Rivera Clothing</h1>
+							<p>Premium E-commerce Brand Launch</p>
 						</div>
-					</section>
+
+						<div class="project-container">
+							<!-- Project Summary Card -->
+							<div style="background: rgba(29, 36, 42, 0.8); border-radius: 10px; padding: 2em; margin: 0 0 3em; box-shadow: 0 5px 15px rgba(0,0,0,0.15);">
+								<div style="display: flex; flex-wrap: wrap; gap: 2em;">
+									<div style="flex: 1; min-width: 250px;">
+										<h3 style="margin-top: 0;">Project Overview</h3>
+										<p>Launch of Rivera Clothing, a premium spin-off brand from River Max, focused on minimal design aesthetics and exclusive limited-drop collections. The project involved creating a high-performance e-commerce experience that embodied the brand's luxury positioning.</p>
+										<div style="margin-top: 1.5em;">
+											<div style="display: flex; margin-bottom: 0.8em;">
+												<div style="width: 100px; font-weight: bold;">Client:</div>
+												<div>Rivera Clothing (River Max Group)</div>
+											</div>
+											<div style="display: flex; margin-bottom: 0.8em;">
+												<div style="width: 100px; font-weight: bold;">Duration:</div>
+												<div>4 months</div>
+											</div>
+											<div style="display: flex; margin-bottom: 0.8em;">
+												<div style="width: 100px; font-weight: bold;">Role:</div>
+												<div>E-commerce Developer & Brand Strategist</div>
+											</div>
+										</div>
+									</div>
+									<div style="flex: 1; min-width: 250px; display: flex; align-items: center;">
+										<img src="images/ima6.PNG" alt="Rivera Clothing Preview" style="max-width: 100%; max-height: 180px; height: auto; border-radius: 5px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); object-fit: contain;">
+									</div>
+								</div>
+							</div>
+
+							<!-- Main Image -->
+							<div class="image-container">
+								<img src="images/ima6.PNG" alt="Rivera Clothing E-commerce Platform" />
+							</div>
+
+							<!-- Project Journey Timeline -->
+							<h2 class="section-title" style="margin-top: 4em;">Project Journey</h2>
+							<div class="timeline">
+								<div class="timeline-item">
+									<div class="timeline-marker"></div>
+									<div class="timeline-content">
+										<h3>Challenge</h3>
+										<p>River Max wanted to launch a premium spin-off brand that would appeal to a higher-end market segment. The challenge was to create a distinct brand identity and e-commerce experience that conveyed exclusivity and premium quality, while maintaining operational integration with the parent company's systems.</p>
+									</div>
+								</div>
+								<div class="timeline-item">
+									<div class="timeline-marker"></div>
+									<div class="timeline-content">
+										<h3>Strategy</h3>
+										<p>We developed a three-pronged approach:</p>
+										<ul style="margin-left: 1.5em;">
+											<li><strong>Minimalist Design:</strong> Create a clean, premium e-commerce interface that emphasized product photography and focused on user experience.</li>
+											<li><strong>Conversion Optimization:</strong> Streamline the path from product discovery to checkout with intuitive flows and minimal friction points.</li>
+											<li><strong>Brand Identity:</strong> Establish a distinctive visual language (typography, color palette, photography style) that would position Rivera as a luxury alternative.</li>
+										</ul>
+									</div>
+								</div>
+								<div class="timeline-item">
+									<div class="timeline-marker"></div>
+									<div class="timeline-content">
+										<h3>Execution</h3>
+										<ul style="margin-left: 1.5em;">
+											<li>Built and launched a minimal, premium e-commerce experience for Rivera Clothing as a new brand spun off from River Max.</li>
+											<li>Implemented high-performance UI and conversion-focused flows (product detail page to checkout, email capture, analytics).</li>
+											<li>Established a clean brand system (palette, typography, limited-drop messaging) supporting exclusivity positioning.</li>
+											<li>Integrated analytics to track user behavior and optimize conversion paths.</li>
+										</ul>
+									</div>
+								</div>
+								<div class="timeline-item">
+									<div class="timeline-marker"></div>
+									<div class="timeline-content">
+										<h3>Results</h3>
+										<ul style="margin-left: 1.5em;">
+											<li>Successfully launched the Rivera brand with strong visual identity and customer experience.</li>
+											<li>Established Rivera as a distinct entity with its own customer base while maintaining operational synergies with River Max.</li>
+											<li>Created a scalable platform that could accommodate future limited-drop collections.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<!-- Second Image with better context -->
+							<div style="margin: 4em 0;">
+								<h3 class="section-title">Brand Experience</h3>
+								<div class="image-container">
+									<img src="images/ima21.PNG" alt="Rivera Brand Experience" />
+								</div>
+							</div>
+							
+							<!-- Skills Implemented -->
+							<div class="skills-section" style="margin-top: 4em;">
+								<h2 class="section-title">Skills Implemented</h2>
+								<div class="skills-row">
+									<div class="skill-item">
+										<div class="skill-icon"><i class="fas fa-shopping-cart"></i></div>
+										<div class="skill-name">E-commerce Development</div>
+									</div>
+									<div class="skill-item">
+										<div class="skill-icon"><i class="fas fa-paint-brush"></i></div>
+										<div class="skill-name">Brand Design</div>
+									</div>
+									<div class="skill-item">
+										<div class="skill-icon"><i class="fas fa-tachometer-alt"></i></div>
+										<div class="skill-name">Performance Optimization</div>
+									</div>
+									<div class="skill-item">
+										<div class="skill-icon"><i class="fas fa-funnel-dollar"></i></div>
+										<div class="skill-name">Conversion Optimization</div>
+									</div>
+									<div class="skill-item">
+										<div class="skill-icon"><i class="fas fa-palette"></i></div>
+										<div class="skill-name">UI/UX Design</div>
+									</div>
+									<div class="skill-item">
+										<div class="skill-icon"><i class="fas fa-chart-bar"></i></div>
+										<div class="skill-name">Analytics Integration</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Project Navigation -->
+							<div class="project-footer">
+								<a href="index.html" class="back-button">View All Projects</a>
+							</div>
+						</div>
+					</div>
 
 				<!-- Footer -->
 					<footer id="footer">
 						<div class="inner">
-							<ul class="icons">
-								<li><a href="https://www.tiktok.com/@julianriversss" class="icon brands alt fa-tiktok" target="_blank"><span class="label">TikTok</span></a></li>
-								<li><a href="https://www.instagram.com/julianriverss" class="icon brands alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
-								<li><a href="https://www.linkedin.com/in/julian-rivera-g" class="icon brands alt fa-linkedin-in" target="_blank"><span class="label">LinkedIn</span></a></li>
-								
-							</ul>
 							<ul class="copyright">
 								<li>&copy; Julián Rivera</li> since 2017<li> <a href="https://www.linkedin.com/in/julian-rivera-g" target="_blank">My goal to grow your business</a></li>
 							</ul>
@@ -108,6 +519,11 @@
 					</footer>
 
 			</div>
+
+		<!-- Back to top button -->
+		<div class="back-to-top">
+			<i class="fas fa-arrow-up"></i>
+		</div>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
@@ -117,6 +533,54 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<!-- Add Font Awesome for icons -->
+			<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+			
+			<!-- Additional script for back to top functionality -->
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					var backToTopButton = document.querySelector('.back-to-top');
+					
+					window.addEventListener('scroll', function() {
+						if (window.pageYOffset > 300) {
+							backToTopButton.classList.add('visible');
+						} else {
+							backToTopButton.classList.remove('visible');
+						}
+					});
+					
+					backToTopButton.addEventListener('click', function() {
+						window.scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
+					});
+				});
+			</script>
+
+	</body>
+</html>
+			<!-- Additional script for back to top functionality -->
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					var backToTopButton = document.querySelector('.back-to-top');
+					
+					window.addEventListener('scroll', function() {
+						if (window.pageYOffset > 300) {
+							backToTopButton.classList.add('visible');
+						} else {
+							backToTopButton.classList.remove('visible');
+						}
+					});
+					
+					backToTopButton.addEventListener('click', function() {
+						window.scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
+					});
+				});
+			</script>
 
 	</body>
 </html>
